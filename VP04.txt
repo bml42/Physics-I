@@ -1,0 +1,78 @@
+from __future__ import division, print_function
+from visual import *
+scene.width = 1000
+
+#Summarizer: Benjamin Linam
+#Recorder: Zachary Tisdale
+
+#Constants
+G = 1.3e7
+MassP = 1.5e24
+MassS = 6e4
+scalefactor = 1.3e-13
+
+#Variables
+Jim=sphere(pos = (0,-2e7,0) , radius = 6.4e6, color = color.cyan)
+Garry=sphere(pos = (-13e7,4.5e7,0) , radius = 3e6 , color = color.red)
+
+#distance
+r =(Garry.pos - Jim.pos)
+rhat = r/mag(r)
+
+#Fgrav on Objects
+Fmag = (G*MassP*MassS)/(mag(r)*mag(r))
+print(Fmag)
+F_on1=Fmag*rhat
+print("gravforce'=", F_on1)
+
+#arrow
+arrow(pos = Garry.pos , axis = -scalefactor*F_on1 , color = color.green)
+
+#loop arrow calculations
+
+r1=(vector(-13e7,4.5e7,0) - Jim.pos)
+r2=(vector(-6.5e7,4.5e7,0) - Jim.pos)
+r3=(vector(0,4.5e7,0) - Jim.pos)
+r4=(vector(6.5e7,4.5e7,0) - Jim.pos)
+r5=(vector(913e7,4.5e7,0) - Jim.pos)
+    
+rhat1 = r1/mag(r1)
+rhat2 = r2/mag(r2)
+rhat3 = r3/mag(r3)
+rhat4 = r4/mag(r4)
+rhat5 = r5/mag(r5)
+
+Fmag1 = (G*MassP*MassS)/(mag(r1)*mag(r1))
+Fmag2 = (G*MassP*MassS)/(mag(r2)*mag(r2))
+Fmag3 = (G*MassP*MassS)/(mag(r3)*mag(r3))
+Fmag4 = (G*MassP*MassS)/(mag(r4)*mag(r4))
+Fmag5 = (G*MassP*MassS)/(mag(r5)*mag(r5))
+
+F_on0=Fmag1*rhat1
+F_on2=Fmag2*rhat2
+F_on3=Fmag3*rhat3
+F_on4=Fmag4*rhat4
+F_on5=Fmag5*rhat5
+
+print("gravforce0 =", F_on0)
+print("gravforce1 =", F_on1)
+print("gravforce2 =", F_on2)
+print("gravforce3 =", F_on3)
+print("gravforce4 =", F_on4)
+print("gravforce5 =", F_on5)
+
+#Creation of each spacecraft
+x=10
+while x > 0:
+    rate(2)
+    A=ball=sphere(pos=vector(-13e7,4.5e7,0), color=color.orange, radius=3e6)
+    B=ball=sphere(pos=vector(-6.5e7,4.5e7,0), color=color.white, radius=3e6)
+    C=ball=sphere(pos=vector(0,4.5e7,0), color=color.magenta, radius=3e6)
+    D=ball=sphere(pos=vector(6.5e7,4.5e7,0), color=color.blue, radius=3e6)
+    E=ball=sphere(pos=vector(13e7,4.5e7,0), color=color.yellow, radius=3e6) 
+
+    arrow(pos = A.pos , axis = -scalefactor*F_on0 , shaftwidth = (.5*A.radius), color = color.green)
+    arrow(pos = B.pos , axis = -scalefactor*F_on2 , shaftwidth = (.5*B.radius), color = color.green)
+    arrow(pos = C.pos , axis = -scalefactor*F_on3 , shaftwidth = (.5*C.radius), color = color.green)
+    arrow(pos = D.pos , axis = -scalefactor*F_on4 , shaftwidth = (.5*D.radius), color = color.green)
+    arrow(pos = E.pos , axis = -scalefactor*F_on5 , shaftwidth = (.5*E.radius), color = color.green)

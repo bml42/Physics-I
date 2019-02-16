@@ -1,0 +1,81 @@
+#Recorder: Benjamin Linam
+#Summarizer: Jared Shung
+#Skeptic: Wenwen Xu
+
+from __future__ import division, print_function
+from visual.graph import *
+from visual.factorial import *
+from math import log
+
+#Constants
+Ntotal = 700
+N1 = 400
+N2 = Ntotal-N1
+qtotal = 100
+aVn = 6.022e23
+mmAl = 26.98 #molar mass of Al
+
+#Initial Values
+q1 = 0
+hbar = 1.05e-34
+kal = 16 #Al interatomic spring constant
+kaleff = 4*kal #Effective kal according to Einsteins model
+kpb = 5 #Pb interatomic spring constant
+kpbeff = 4*kpb #Effective kpb according to Einsteins model
+print (kaleff)
+Kb = 1.38e-23
+natm1 = N1/3 #number of atoms in block 1
+natm2 = N2/3 #number of atoms in block 2
+ma = (mmAl/aVn)/1000 #Mass of one Al atom in kilograms
+
+#Graphs
+T1graph = gcurve(color=color.cyan)
+T2graph = gcurve(color=color.green)
+#waygraphtot = gcurve(delta=0.7, color=color.green)
+#waygraph1 = gcurve(delta=0.7, color=color.red)
+#waygraph2 = gcurve(delta=0.7, color=color.blue)
+
+nA = 6.02e23 ## Avogadro's number
+## This converts specific heat data from
+## a per mole to a per atom basis and
+## plots C vs. T (as dots) for Al and for Pb.
+## Data are in the form (T,C).
+Aldata =[(20,0.23/nA),(40,2.09/nA), (60,5.77/nA), (80,9.65/nA), (100,13.04/nA),
+(150,18.52/nA), (200, 21.58/nA), (250,23.25/nA), (300, 24.32/nA),
+(400,25.61/nA)]
+Pbdata = [(20,11.01/nA),(40,19.57/nA), (60,22.43/nA), (80,23.69/nA), (100,24.43/nA),
+(150,25.27/nA), (200, 25.87/nA), (250,26.36/nA), (300, 26.82/nA),
+(400,27.45/nA)]
+gr = gdisplay(title='Specific heat capacity vs. Temperature', xtitle='T', ytitle = 'C/atom')
+Alg = gdots(color=color.magenta,pos=Aldata)
+Pbg = gdots(color=color.cyan, pos=Pbdata)                 
+
+while q1 < qtotal: ## for each possible value of energy in object 1                             
+    q1a = q1+1
+    q2 = qtotal-q1
+    q2a = qtotal-q1a
+    ways1 = combin(q1+N1-1,q1)
+    ways2 = combin(q2+N2-1,q2)
+    totways = ways1*ways2
+    ways1a = combin(q1a+N1-1,q1a)
+    ways2a = combin(q2a+N2-1,q2a)
+    totawaysa = ways1a*ways2a
+    S1 = Kb*log(ways1)
+    S2 = Kb*log(ways2)
+    S1a = Kb*log(ways1a)
+    S2a = Kb*log(ways2a)
+    E = hbar*((kaleff/ma)**1/2)
+    T1 = E/(S1a-S1)
+    T2 = E/(S2-S2a)
+    print (T2)
+    T1graph.plot( pos=(q1,T1) )
+    T2graph.plot( pos=(q1,T2) )
+    Alg.plot(pos=(Aldata))
+    Pbg.plot(pos=(Pbdata))
+    #waygraph2.plot( pos=(q1,log(ways2)))
+    #waygraph1.plot( pos=(q1,log(ways1)) )
+    #waygraphtot.plot( pos=(q1,log(totways)) )
+    q1 = q1+1 
+print(ways1)
+print(ways2)
+

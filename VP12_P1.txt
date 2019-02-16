@@ -1,0 +1,69 @@
+#Recorder: Benjamin Linam
+#Summarizer: Jared Shung
+#Skeptic:  Wenwen Xu
+
+
+from __future__ import division, print_function
+from visual.graph import *
+from visual.factorial import *
+from math import log
+
+#Constants
+Ntotal = 700
+N1 = 400
+N2 = Ntotal-N1
+qtotal = 100
+aVn = 6.022e23
+mmAl = 26.98 
+
+#Initial Values
+q1 = 0
+hbar = 1.05e-34
+kal = 16 
+kaleff = 4*kal 
+kpb = 5 
+kpbeff = 4*kpb 
+print (kaleff)
+Kb = 1.38e-23
+natm1 = N1/3 
+natm2 = N2/3 
+ma = (mmAl/aVn)/1000 
+
+#Graphs
+T1graph = gcurve(color=color.cyan)
+T2graph = gcurve(color=color.green)
+#waygraphtot = gcurve(delta=0.7, color=color.green)
+#waygraph1 = gcurve(delta=0.7, color=color.red)
+#waygraph2 = gcurve(delta=0.7, color=color.blue)
+
+                 
+
+while q1 < qtotal:                             
+    q1a = q1+1
+    q2 = qtotal-q1
+    q2a = qtotal-q1a
+    ways1 = combin(q1+N1-1,q1)
+    ways2 = combin(q2+N2-1,q2)
+    totways = ways1*ways2
+    ways1a = combin(q1a+N1-1,q1a)
+    ways2a = combin(q2a+N2-1,q2a)
+    totawaysa = ways1a*ways2a
+    S1 = Kb*log(ways1)
+    S2 = Kb*log(ways2)
+    S1a = Kb*log(ways1a)
+    S2a = Kb*log(ways2a)
+    E = hbar*((kaleff/ma)**1/2)
+    T1 = E/(S1a-S1)
+    T2 = E/(S2-S2a)
+    print (T2)
+    T1graph.plot( pos=(q1,T1) )
+    T2graph.plot( pos=(q1,T2) )
+    #Alg.plot(pos=(Aldata))
+    #Pbg.plot(pos=(Pbdata))
+    #waygraph2.plot( pos=(q1,log(ways2)))
+    #waygraph1.plot( pos=(q1,log(ways1)) )
+    #waygraphtot.plot( pos=(q1,log(totways)) )
+    q1 = q1+1 
+print(ways1)
+print(ways2)
+

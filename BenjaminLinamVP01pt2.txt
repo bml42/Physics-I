@@ -1,0 +1,10 @@
+#Benjamin Linam VP01Pt2
+
+from visual import *
+Anne=sphere(pos = vector(-1,0,0), radius = 0.3, color = color.green)
+Bob=sphere(pos = vector(-1,3,0), radius = 0.3, color = color.green)
+Cindy=sphere(pos = vector(-3.5,1.5,0), radius = 0.3, color = color.green)
+
+arrow(pos = Anne.pos, axis=Bob.pos-Anne.pos, color=color.red)
+arrow(pos = Bob.pos, axis=Cindy.pos-Bob.pos, color=color.red)
+arrow(pos = Cindy.pos, axis=Anne.pos-Cindy.pos, color=color.red)

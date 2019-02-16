@@ -1,0 +1,84 @@
+Summarizer: Benjamin Linam
+Recorder: Will McGee
+##PART1 Energy Versus Time 
+from __future__ import division, print_function
+from visual import *
+from visual.graph import *
+scene.width = 400
+scene.height = 760
+## constants and data
+g = 9.8
+mball = 0.03
+L0 = 0.26
+ks = 1.8
+deltat = .01
+
+## objects (origin is at ceiling)
+ceiling = box(pos=vector(0,0,0), length=0.2, height=0.01, width=0.2)
+ball = sphere(pos=vector(0,-0.3,0), radius=0.025,
+color=color.orange, make_trail=True)
+#vector(.2,-0.3,0)
+spring = helix(pos=ceiling.pos, axis=ball.pos-ceiling.pos,
+color=color.cyan, thickness=.003, coils=40, radius=0.010)
+## initial values
+pball = mball*vector(0,-1,0) #(.5,.5,.55)
+Fgrav = mball*g*vector(0,-1,0)
+L= ceiling.pos-ball.pos
+Lhat=L/mag(L)
+s= mag(L) - L0
+Fspring= -ks*s*Lhat
+Fnet = Fgrav-Fspring
+pmag = mag(pball)
+phat = pball/pmag
+FPar = dot(Fnet, phat)*phat
+FPer = Fnet - FPar
+US=.5*ks*(s*s)
+KS=-US
+TS=KS+US
+t = 0
+## improve the display
+scene.autoscale = False ## turn off automatic camera zoom
+scene.center = vector(0,-L0,0) ## move camera down
+scene.waitfor('click') ## wait for a mouse click
+xgraph = gcurve(color=color.green)
+ygraph = gcurve(color=color.yellow)
+zgraph = gcurve(color=color.red)
+
+parr=arrow(pos=ball.pos, axis=pball, color=color.yellow)
+farr=arrow(pos=ball.pos, axis=Fnet, color= color.red)
+fparparr=arrow(pos=ball.pos, axis=FPar, color=color.green)
+fperparr=arrow(pos=ball.pos, axis=FPer, color= color.magenta)
+## calculation loop
+while t <10:
+    rate(100)
+    L= ceiling.pos-ball.pos
+    Lhat=L/mag(L)
+    s= mag(L) - L0
+    Fspring = -ks*s*Lhat
+    Fnet = Fgrav-Fspring
+    pball = pball + Fnet*deltat
+    ball.pos = ball.pos + (pball/mball)*deltat
+    spring.axis = ball.pos - ceiling.pos
+    parr.pos = ball.pos
+    parr.axis = pball*4
+    farr.pos = ball.pos
+    farr.axis = Fnet
+    pmag = mag(pball)
+    phat = pball/pmag
+    FPar = dot(Fnet, phat)*phat
+    FPer = Fnet - FPar
+    fparparr.pos = ball.pos
+    fparparr.axis = FPar
+    fperparr.pos = ball.pos
+    fperparr.axis = FPer
+    US=.5*ks*(s*s)
+    KS=-US
+    TS=KS+US
+    xgraph.plot( pos=(t,US) )
+    ygraph.plot( pos=(t,KS) )
+    zgraph.plot( pos=(t,TS) )
+    #really cool graph
+    #xgraph.plot( pos=(t,US) )
+    #xgraph.plot( pos=(t,KS) )
+    #xgraph.plot( pos=(t,TS) )
+    t = t + deltat

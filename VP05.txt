@@ -1,0 +1,54 @@
+from __future__ import division, print_function
+from visual import *
+scene.width = scene.height = 800
+
+#BenjaminLinam:Summarizer Zachary Tisdale:Recorder
+
+#constants
+G = 6.7e-11
+mEarth = 6e24
+mcraft = 15e3
+deltat = 60
+sf=4e-1
+
+
+#calculations
+Earth = sphere(pos=vector(0,0,0), radius=6.4e6, color=color.cyan)
+craft = sphere(pos=vector(-10*Earth.radius, 0,0), radius=1e6,
+color=color.yellow, make_trail=True)
+vcraft = vector(0,2e3,0)
+pcraft = mcraft*vcraft
+r=(Earth.pos-craft.pos)
+rhat=r/mag(r)
+Fmag= G*((mEarth*mcraft)/(mag(r)*mag(r)))
+Fgrav= Fmag*(rhat)
+Fnet=Fgrav
+t = 0
+
+parr=arrow(pos=craft.pos, axis=pcraft, shaftwidth=.5e6, color=color.yellow)
+farr=arrow(pos=craft.pos, axis=Fnet, shaftwidth=.5e6, color= color.red)
+
+scene.autoscale = False ##turn off automatic camera zoom
+
+print('initial momentum =', pcraft)
+print('distance =', r)
+
+while t < 10*365*24*60*60:
+    rate(100)
+    r=(Earth.pos-craft.pos)
+    rhat=r/mag(r)
+    Fmag= G*((mEarth*mcraft)/(mag(r)*mag(r)))
+    Fgrav= Fmag*(rhat)
+    Fnet=Fgrav
+    pcraft=pcraft+Fnet*deltat
+    craft.pos = craft.pos + (pcraft/mcraft)*deltat
+    t = t+deltat
+
+    parr.pos = craft.pos
+    parr.axis = pcraft * sf
+    farr.pos = craft.pos
+    farr.axis = Fnet * 2e3
+    if mag(r) < Earth.radius:
+        break ## exit from the loop
+    
+    

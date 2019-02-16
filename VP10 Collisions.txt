@@ -1,0 +1,62 @@
+from __future__ import division, print_function
+from visual import *
+from visual.graph import *
+scene.width = 800
+##Constants
+massAu = (79+118)*1.7e-27
+massAlpha = (2+2)*1.7e-27
+qAu = 2*1.6e-19
+qAlpha = 79*1.6e-19
+oofpez = 9e9 ## one-over-four-pi-epsilon-zero
+deltat = 1e-23
+##Objects
+b0 = vector(0,0,0)
+b1 = vector(0,5e-15,0)
+b2 = vector(0,10e-15,0)
+b3 = vector(0,100e-15,0)
+bt = vector(0,7.41e-15,0)
+Au = sphere(pos=vector(0,0,0), radius=8e-15, color=color.yellow, make_trail=True)
+Alpha = sphere(pos=vector(-1e-13,0,0)+b1, radius=2e-15, color=color.red, make_trail=True)
+#Initial Values
+pAu = massAu*vector(0,0,0)
+pAlpha = vector(1.043e-19,0,0)
+vAlpha = vector(1.534e7,0,0)
+phat = pAlpha/mag(pAlpha)
+t = 0
+r = Au.pos-Alpha.pos
+rhat = r/mag(r)
+Fele = oofpez*((qAu*qAlpha)/(mag(r)*mag(r)))*rhat
+X_momentum = gdisplay(x=0,y=400,height=200)
+px_Alpha = gcurve(color=color.red)
+px_Au = gcurve(color=color.blue)
+px_total = gcurve(color=color.cyan)
+Y_momentum = gdisplay(x=0,y=600, height=200)
+py_Alpha = gcurve(color=color.red)
+py_Au = gcurve(color=color.blue)
+py_total = gcurve(color=color.cyan)
+
+
+##Calculation Loop
+while t < 1e-20:
+    rate(1000)
+    r = Au.pos-Alpha.pos
+    rhat = r/mag(r)
+    Fele = oofpez*((qAu*qAlpha)/(mag(r)*mag(r)))*rhat
+    Alpha.pos = Alpha.pos + (pAlpha/massAlpha)*deltat
+    Au.pos = Au.pos + (pAu/massAu)*deltat
+    pAlpha = pAlpha - Fele*deltat
+    pAu = pAu + Fele*deltat
+    px_Alpha.plot(pos=(t,pAlpha.x))
+    px_Au.plot(pos=(t,pAu.x))
+    px_total.plot(pos=(t, pAlpha.x+pAu.x))
+    py_Alpha.plot(pos=(t,pAlpha.y))
+    py_Au.plot(pos=(t,pAu.y))
+    py_total.plot(pos=(t, pAlpha.y+pAu.y))
+    phat = pAlpha/mag(pAlpha)
+    t = t + deltat
+
+theta = acos(phat.x)
+thetadeg = theta * (180/3.14)
+print("theta =", thetadeg)
+
+    
